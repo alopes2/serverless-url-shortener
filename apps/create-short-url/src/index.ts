@@ -53,12 +53,13 @@ export const handler = async (
 
   const hashID = new Hashids(idSalt, 6);
   const id = crypto.randomUUID();
+  const code = hashID.encode(id);
 
   const command = new PutCommand({
     TableName: tableName,
     Item: {
       ID: id,
-      Code: hashID,
+      Code: code,
       URL: request.url,
     },
   });
