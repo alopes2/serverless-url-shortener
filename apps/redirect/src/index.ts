@@ -18,6 +18,8 @@ const redisClient = createClient({
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
+  await redisClient.connect();
+
   if (!event.pathParameters || !event.pathParameters[redirectCodeParam]) {
     return {
       statusCode: 400,

@@ -20,7 +20,9 @@ module "redirect_lambda" {
   ]
 
   environment_variables = {
-    ELASTICACHE_PORT = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].port}"
-    ELASTICACHE_URL  = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].address}"
+    "ELASTICACHE_PORT" = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].port}"
+    "ELASTICACHE_URL"  = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].address}"
   }
+
+  depends_on = [aws_elasticache_serverless_cache.urls_cache]
 }
