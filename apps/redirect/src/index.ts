@@ -50,10 +50,14 @@ export const handler = async (
       };
     }
 
+    const url: string = dynamoResponse.Items[0].URL;
+
+    console.log('Redirecting code %s to URL %s', redirectCode, url);
+
     return {
       statusCode: 302,
       headers: {
-        Location: dynamoResponse.Items[0].URL, // For simplicity, let's say the first is our expected URL
+        Location: url, // For simplicity, let's say the first is our expected URL
       },
       body: '',
     };
