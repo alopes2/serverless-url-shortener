@@ -14,18 +14,21 @@ console.log(
   elasticachePort
 );
 
+const redisUrl = `redis://${process.env.ELASTICACHE_URL}:${elasticachePort}`;
+
 const redisClient = createClient({
+  url: redisUrl,
   socket: {
-    host: process.env.ELASTICACHE_URL,
-    port: elasticachePort,
     tls: true,
   },
 });
 
+redisClient.on('error', (err) => console.log('Redis Client Error ', err));
+
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  var redisConnectecClient = await redisClient.connect();
+  await redisClient.connect();
 
   if (!event.pathParameters || !event.pathParameters[redirectCodeParam]) {
     return {
@@ -42,7 +45,9 @@ export const handler = async (
 
   let url;
 
-  const cachedUrl = await redisConnectecClient.get(redirectCode);
+  const cachedUrl = await redisClient.get(redirectCode);
+
+  await redisClient.quit();
 
   if (cachedUrl) {
     console.log('Cached redirecting code %s to URL %s', redirectCode, url);
@@ -82,9 +87,9 @@ export const handler = async (
 
     const url: string = dynamoResponse.Items[0].URL;
 
-    await redisConnectecClient.set(redirectCode, url);
+    await redisClient.set(redirectCode, url);
 
-    await redisConnectecClient.quit();
+    await redisClient.disconnect();
 
     console.log('Redirecting code %s to URL %s', redirectCode, url);
 
