@@ -77,6 +77,8 @@ export const handler = async (
 
     await redisClient.set(redirectCode, url);
 
+    await redisClient.quit();
+
     console.log('Redirecting code %s to URL %s', redirectCode, url);
 
     return {
