@@ -13,7 +13,7 @@ defaults:
 
 jobs:
   terraform:
-    name: 'Deploy DeleteMovie Lambda'
+    name: 'Deploy Create Short URL Lambda'
     runs-on: ubuntu-latest
     steps:
       # Checkout the repository to the GitHub Actions runner
@@ -39,7 +39,7 @@ jobs:
         run: npm run build
 
       - name: Zip build
-        run: zip -r main.zip ./build
+        run: cd build && zip -r main.zip ./build
 
       - name: Update Lambda code
         run: aws lambda update-function-code --function-name=create-short-url --zip-file=fileb://main.zip
