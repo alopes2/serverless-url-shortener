@@ -9,8 +9,11 @@ resource "aws_api_gateway_deployment" "url_shortener_api_deployment" {
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_rest_api.url_shortener_api.root_resource_id,
+      aws_api_gateway_resource.redirect_resource.id,
       module.post_url_method.id,
       module.post_url_method.integration_id,
+      module.redirect_url_method.id,
+      module.redirect_url_method.integration_id,
     ]))
   }
 
@@ -19,11 +22,16 @@ resource "aws_api_gateway_deployment" "url_shortener_api_deployment" {
   }
 }
 
+resource "aws_api_gateway_resource" "redirect_resource" {
+  parent_id   = aws_api_gateway_rest_api.url_shortener_api.root_resource_id
+  path_part   = "{redirectCode}"
+  rest_api_id = aws_api_gateway_rest_api.url_shortener_api.id
+}
+
 resource "aws_api_gateway_stage" "live" {
   deployment_id = aws_api_gateway_deployment.url_shortener_api_deployment.id
   rest_api_id   = aws_api_gateway_rest_api.url_shortener_api.id
   stage_name    = "live"
-
 }
 
 module "post_url_method" {
@@ -34,5 +42,16 @@ module "post_url_method" {
   resource_path        = "/"
   integration_uri      = module.create_short_url_lambda.invoke_arn
   lambda_function_name = module.create_short_url_lambda.name
+  execution_arn        = aws_api_gateway_rest_api.url_shortener_api.execution_arn
+}
+
+module "redirect_url_method" {
+  source               = "./modules/api-method"
+  api_id               = aws_api_gateway_rest_api.url_shortener_api.id
+  http_method          = "GET"
+  resource_id          = aws_api_gateway_resource.redirect_resource.id
+  resource_path        = aws_api_gateway_resource.redirect_resource.path
+  integration_uri      = module.redirect_lambda.invoke_arn
+  lambda_function_name = module.redirect_lambda.name
   execution_arn        = aws_api_gateway_rest_api.url_shortener_api.execution_arn
 }
