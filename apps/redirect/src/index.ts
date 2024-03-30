@@ -1,5 +1,9 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  QueryCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 const tableName = 'urls';
@@ -25,17 +29,19 @@ export const handler = async (
   const client = new DynamoDBClient({});
   const docClient = DynamoDBDocumentClient.from(client);
 
-  const command = new GetCommand({
+  const command = new QueryCommand({
     TableName: tableName,
-    Key: {
-      Code: redirectCode,
+    IndexName: 'CodeIndex',
+    KeyConditionExpression: 'Code = :code',
+    ExpressionAttributeValues: {
+      ':code': redirectCode,
     },
   });
 
   try {
     const dynamoResponse = await docClient.send(command);
 
-    if (!dynamoResponse.Item) {
+    if (!dynamoResponse.Items || dynamoResponse.Items.length == 0) {
       return {
         statusCode: 404,
         body: JSON.stringify({
@@ -47,7 +53,7 @@ export const handler = async (
     return {
       statusCode: 302,
       headers: {
-        Location: dynamoResponse.Item.URL,
+        Location: dynamoResponse.Items[0].URL, // For simplicity, let's say the first is our expected URL
       },
       body: '',
     };
