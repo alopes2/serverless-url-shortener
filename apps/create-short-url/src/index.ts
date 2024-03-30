@@ -55,6 +55,9 @@ export const handler = async (
   const id = crypto.randomUUID();
   const code = hashID.encode(id);
 
+  console.log('ID ', id);
+  console.log('Code ', code);
+
   const command = new PutCommand({
     TableName: tableName,
     Item: {
