@@ -1,0 +1,25 @@
+{
+  "name": "create-short-url",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "tsc && copyfiles package.json build/ && cd build/ && npm install --production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.470.0",
+    "@aws-sdk/lib-dynamodb": "^3.470.0",
+    "hashids": "^2.3.0",
+    "typescript": "^5.4.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.4",
+    "copyfiles": "^2.4.1"
+  }
+}
