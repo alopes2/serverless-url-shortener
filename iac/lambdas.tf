@@ -7,7 +7,7 @@ module "create_short_url_lambda" {
   ]
 
   environment_variables = {
-    BASE_URL = aws_api_gateway_stage.live.invoke_url,
+    BASE_URL = "https://x06h2c82x8.execute-api.eu-central-1.amazonaws.com/live/",
     SALT     = "url_shortneter"
   }
 }
