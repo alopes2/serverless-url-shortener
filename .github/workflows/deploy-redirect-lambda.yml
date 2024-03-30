@@ -1,0 +1,45 @@
+name: Deploy Redirect Lambda
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/redirect/**/*
+      - .github/workflows/deploy-redirect-lambda.yml
+
+defaults:
+  run:
+    working-directory: apps/redirect/
+
+jobs:
+  terraform:
+    name: 'Deploy Redirect Lambda'
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Configure AWS Credentials Action For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Install packages
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Zip build
+        run: cd build && zip -r ../main.zip .
+
+      - name: Update Lambda code
+        run: aws lambda update-function-code --function-name=redirect --zip-file=fileb://main.zip
