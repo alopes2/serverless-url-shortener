@@ -15,7 +15,11 @@ console.log(
 );
 
 const redisClient = createClient({
-  url: `redis://${process.env.ELASTICACHE_PORT}:${elasticachePort}`,
+  socket: {
+    host: process.env.ELASTICACHE_URL,
+    port: elasticachePort,
+    tls: true,
+  },
 });
 
 export const handler = async (
@@ -39,6 +43,8 @@ export const handler = async (
   let url;
 
   const cachedUrl = await redisClient.get(redirectCode);
+
+  await redisClient.quit();
 
   if (cachedUrl) {
     console.log('Cached redirecting code %s to URL %s', redirectCode, url);
