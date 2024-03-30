@@ -18,5 +18,5 @@ variable "policies" {
 variable "environment_variables" {
   description = "The lambdas environment variables."
   type        = map(string)
-  default     = []
+  default     = null
 }
