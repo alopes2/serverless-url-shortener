@@ -5,6 +5,11 @@ module "create_short_url_lambda" {
   policies = [
     data.aws_iam_policy_document.create_short_url_lambda.json
   ]
+
+  environment_variables = {
+    BASE_URL = aws_api_gateway_stage.live.invoke_url,
+    SALT     = "url_shortneter"
+  }
 }
 
 module "redirect_lambda" {
