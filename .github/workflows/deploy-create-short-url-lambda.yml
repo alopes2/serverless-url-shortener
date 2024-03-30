@@ -39,7 +39,7 @@ jobs:
         run: npm run build
 
       - name: Zip build
-        run: zip -r -j main.zip ./build
+        run: zip -r main.zip ./build
 
       - name: Update Lambda code
         run: aws lambda update-function-code --function-name=create-short-url --zip-file=fileb://main.zip
