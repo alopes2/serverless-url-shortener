@@ -25,7 +25,7 @@ const redisClient = createClient({
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  await redisClient.connect();
+  var redisConnectecClient = await redisClient.connect();
 
   if (!event.pathParameters || !event.pathParameters[redirectCodeParam]) {
     return {
@@ -42,9 +42,7 @@ export const handler = async (
 
   let url;
 
-  const cachedUrl = await redisClient.get(redirectCode);
-
-  await redisClient.quit();
+  const cachedUrl = await redisConnectecClient.get(redirectCode);
 
   if (cachedUrl) {
     console.log('Cached redirecting code %s to URL %s', redirectCode, url);
@@ -84,9 +82,9 @@ export const handler = async (
 
     const url: string = dynamoResponse.Items[0].URL;
 
-    await redisClient.set(redirectCode, url);
+    await redisConnectecClient.set(redirectCode, url);
 
-    await redisClient.quit();
+    await redisConnectecClient.quit();
 
     console.log('Redirecting code %s to URL %s', redirectCode, url);
 
