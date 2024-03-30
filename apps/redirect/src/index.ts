@@ -37,6 +37,8 @@ export const handler = async (
 
   const cachedUrl = await redisClient.get(redirectCode);
 
+  await redisClient.quit();
+
   if (cachedUrl) {
     console.log('Cached redirecting code %s to URL %s', redirectCode, url);
 
