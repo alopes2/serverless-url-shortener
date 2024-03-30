@@ -32,3 +32,20 @@ variable "execution_arn" {
   description = "The execution ARN of the API"
   type        = string
 }
+
+variable "stage_name" {
+  description = "The stage name"
+  type        = string
+}
+
+variable "burst_limit" {
+  description = "Number of concurrent requests"
+  type        = number
+  default     = 1
+}
+
+variable "rate_limit" {
+  description = "Number of request per second"
+  type        = number
+  default     = 1
+}

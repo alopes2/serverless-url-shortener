@@ -43,6 +43,7 @@ module "post_url_method" {
   integration_uri      = module.create_short_url_lambda.invoke_arn
   lambda_function_name = module.create_short_url_lambda.name
   execution_arn        = aws_api_gateway_rest_api.url_shortener_api.execution_arn
+  stage_name           = aws_api_gateway_stage.live.stage_name
 }
 
 module "redirect_url_method" {
@@ -54,4 +55,6 @@ module "redirect_url_method" {
   integration_uri      = module.redirect_lambda.invoke_arn
   lambda_function_name = module.redirect_lambda.name
   execution_arn        = aws_api_gateway_rest_api.url_shortener_api.execution_arn
+  stage_name           = aws_api_gateway_stage.live.stage_name
+  rate_limit           = 2
 }
