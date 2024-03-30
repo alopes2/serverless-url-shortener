@@ -1,14 +1,8 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  DeleteCommand,
-  PutCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import Hashids from 'hashids';
 
 const tableName = 'urls';
-const idSalt: string = process.env.SALT || '';
 const baseUrl: string = process.env.BASE_URL || '';
 
 type ShortUrlRequest = {
@@ -51,12 +45,8 @@ export const handler = async (
   const client = new DynamoDBClient({});
   const docClient = DynamoDBDocumentClient.from(client);
 
-  const hashID = new Hashids(idSalt, 6);
   const id = crypto.randomUUID();
-  const code = hashID.encode(id);
-
-  console.log('ID ', id);
-  console.log('Code ', code);
+  const code = generateCode();
 
   const command = new PutCommand({
     TableName: tableName,
@@ -72,12 +62,12 @@ export const handler = async (
 
     const response: Response = {
       id: id,
-      shortUrl: baseUrl + hashID,
+      shortUrl: baseUrl + code,
       url: request.url,
     };
 
     return {
-      statusCode: 204,
+      statusCode: 201,
       body: JSON.stringify(response),
     };
   } catch (e: any) {
@@ -91,3 +81,19 @@ export const handler = async (
     };
   }
 };
+
+function generateCode(): string {
+  const alphabet =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const length = 6;
+
+  var code: string[] = [];
+
+  for (var i = 0; i < length; i++) {
+    var randomIndex: number = Math.round(Math.random() * alphabet.length);
+
+    code[i] = alphabet[randomIndex];
+  }
+
+  return code.join('');
+}

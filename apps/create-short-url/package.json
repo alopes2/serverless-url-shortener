@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "build": "tsc && copyfiles package.json build/ && cd build/ && npm install --production",
+    "build": "tsc && copyfiles package.json build/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,7 +14,6 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.470.0",
     "@aws-sdk/lib-dynamodb": "^3.470.0",
-    "hashids": "^2.3.0",
     "typescript": "^5.4.3"
   },
   "devDependencies": {
