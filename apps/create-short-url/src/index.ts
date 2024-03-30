@@ -85,7 +85,7 @@ export const handler = async (
 function generateCode(): string {
   const alphabet =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const length = 6;
+  const length = 7;
 
   var code: string[] = [];
 
