@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "allow_get_url_lambda" {
     effect = "Allow"
 
     actions = [
-      "dynamodb:GetItem",
+      "dynamodb:Query",
     ]
 
     resources = [
