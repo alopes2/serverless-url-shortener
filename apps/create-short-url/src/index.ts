@@ -7,7 +7,7 @@ import {
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import Hashids from 'hashids';
 
-const tableName = 'Movies';
+const tableName = 'urls';
 const idSalt: string = process.env.SALT || '';
 const baseUrl: string = process.env.BASE_URL || '';
 
