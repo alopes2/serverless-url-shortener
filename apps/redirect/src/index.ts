@@ -1,36 +1,13 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { createClient } from 'redis';
 
 const tableName = 'urls';
 const redirectCodeParam = 'redirectCode';
 
-const elasticachePort = +(process.env.ELASTICACHE_PORT || '6379');
-
-console.log(
-  'Redis URL %s in PORT %d',
-  process.env.ELASTICACHE_URL,
-  elasticachePort
-);
-
-const redisUrl = `redis://${process.env.ELASTICACHE_URL}:${elasticachePort}`;
-
-console.log('Redis URL ', redisUrl);
-
-const redisClient = createClient({
-  socket: {
-    host: process.env.ELASTICACHE_URL,
-    port: elasticachePort,
-    tls: true,
-  },
-});
-
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  await redisClient.connect();
-
   if (!event.pathParameters || !event.pathParameters[redirectCodeParam]) {
     return {
       statusCode: 400,
@@ -43,24 +20,6 @@ export const handler = async (
   let redirectCode: string = event.pathParameters[redirectCodeParam];
 
   console.log('Processing request code ', redirectCode);
-
-  let url;
-
-  const cachedUrl = await redisClient.get(redirectCode);
-
-  await redisClient.quit();
-
-  if (cachedUrl) {
-    console.log('Cached redirecting code %s to URL %s', redirectCode, url);
-
-    return {
-      statusCode: 302,
-      headers: {
-        Location: cachedUrl, // For simplicity, let's say the first is our expected URL
-      },
-      body: '',
-    };
-  }
 
   const client = new DynamoDBClient({});
   const docClient = DynamoDBDocumentClient.from(client);
@@ -87,10 +46,6 @@ export const handler = async (
     }
 
     const url: string = dynamoResponse.Items[0].URL;
-
-    await redisClient.set(redirectCode, url);
-
-    await redisClient.disconnect();
 
     console.log('Redirecting code %s to URL %s', redirectCode, url);
 

@@ -18,11 +18,4 @@ module "redirect_lambda" {
   policies = [
     data.aws_iam_policy_document.allow_get_url_lambda.json
   ]
-
-  environment_variables = {
-    "ELASTICACHE_PORT" = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].port}"
-    "ELASTICACHE_URL"  = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].address}"
-  }
-
-  depends_on = [aws_elasticache_serverless_cache.urls_cache]
 }
