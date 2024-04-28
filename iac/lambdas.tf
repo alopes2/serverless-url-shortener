@@ -17,7 +17,7 @@ module "redirect_lambda" {
   source_file_path = "./init_code/index.mjs"
   policies = [
     data.aws_iam_policy_document.allow_get_url_lambda.json,
-    data.aws_iam_data.aws_iam_policy_document.allow_iam_connect.json
+    data.aws_iam_policy_document.allow_iam_connect.json
   ]
 
   environment_variables = {
