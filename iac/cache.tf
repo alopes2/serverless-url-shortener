@@ -20,8 +20,8 @@ resource "aws_elasticache_serverless_cache" "urls_cache" {
 }
 
 resource "aws_elasticache_user" "main" {
-  user_id       = "url_shortener"
-  user_name     = "url_shortener"
+  user_id       = "url-shortener"
+  user_name     = "url-shortener"
   access_string = "on ~* +@all"
   engine        = "REDIS"
 
