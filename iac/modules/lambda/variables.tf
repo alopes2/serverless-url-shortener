@@ -20,3 +20,16 @@ variable "environment_variables" {
   type        = map(string)
   default     = null
 }
+
+variable "security_group_ids" {
+  description = "The security groups for this lambda."
+  type        = set(string)
+  default     = null
+}
+
+
+variable "subnet_ids" {
+  description = "The subnets for this lambda."
+  type        = set(string)
+  default     = null
+}

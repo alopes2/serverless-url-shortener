@@ -19,9 +19,8 @@ const redisUrl = `redis://${process.env.ELASTICACHE_URL}:${elasticachePort}`;
 console.log('Redis URL ', redisUrl);
 
 const redisClient = createClient({
+  url: redisUrl,
   socket: {
-    host: process.env.ELASTICACHE_URL,
-    port: elasticachePort,
     tls: true,
   },
 });

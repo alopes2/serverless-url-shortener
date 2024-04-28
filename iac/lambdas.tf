@@ -24,5 +24,8 @@ module "redirect_lambda" {
     "ELASTICACHE_URL"  = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].address}"
   }
 
+  security_group_ids = [data.aws_security_group.default_security_group.id]
+  subnet_ids         = data.aws_subnets.default_vpc.ids
+
   depends_on = [aws_elasticache_serverless_cache.urls_cache]
 }
