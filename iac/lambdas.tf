@@ -27,7 +27,7 @@ module "redirect_lambda" {
     "ELASTICACHE_PORT" = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].port}"
     "ELASTICACHE_URL"  = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].address}"
     "REDIS_USERNAME"   = "${aws_elasticache_user.main.user_name}"
-    "REDIS_PASSWORD"   = "SuperSecret123"
+    "REDIS_PASSWORD"   = "MySuperSecret123"
   }
 
   security_group_ids = [data.aws_security_group.default_security_group.id]

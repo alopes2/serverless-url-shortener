@@ -27,7 +27,7 @@ resource "aws_elasticache_user" "main" {
 
   authentication_mode {
     type      = "password"
-    passwords = ["SuperSecret123"]
+    passwords = ["MySuperSecret123"]
   }
 }
 
