@@ -18,20 +18,20 @@ const redisUrl = `redis://${process.env.ELASTICACHE_URL}:${elasticachePort}`;
 
 console.log('Redis URL ', redisUrl);
 
-const redisClient = createClient({
-  username: process.env.REDIS_USERNAME,
-  password: process.env.REDIS_PASSWORD,
-  socket: {
-    host: process.env.ELASTICACHE_URL,
-    port: elasticachePort,
-    tls: true,
-  },
-});
+// const redisClient = createClient({
+//   username: process.env.REDIS_USERNAME,
+//   password: process.env.REDIS_PASSWORD,
+//   socket: {
+//     host: process.env.ELASTICACHE_URL,
+//     port: elasticachePort,
+//     tls: true,
+//   },
+// });
 
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  await redisClient.connect();
+  // await redisClient.connect();
 
   if (!event.pathParameters || !event.pathParameters[redirectCodeParam]) {
     return {
@@ -44,17 +44,17 @@ export const handler = async (
 
   let redirectCode: string = event.pathParameters[redirectCodeParam];
 
-  var cachedUrl = await redisClient.get(redirectCode);
+  // var cachedUrl = await redisClient.get(redirectCode);
 
-  if (cachedUrl) {
-    return {
-      statusCode: 302,
-      headers: {
-        Location: cachedUrl, // For simplicity, let's say the first is our expected URL
-      },
-      body: '',
-    };
-  }
+  // if (cachedUrl) {
+  //   return {
+  //     statusCode: 302,
+  //     headers: {
+  //       Location: cachedUrl, // For simplicity, let's say the first is our expected URL
+  //     },
+  //     body: '',
+  //   };
+  // }
 
   console.log('Processing request code ', redirectCode);
 
@@ -86,7 +86,7 @@ export const handler = async (
 
     console.log('Redirecting code %s to URL %s', redirectCode, url);
 
-    await redisClient.set(redirectCode, url);
+    // await redisClient.set(redirectCode, url);
 
     return {
       statusCode: 302,

@@ -25,17 +25,3 @@ data "aws_iam_policy_document" "allow_get_url_lambda" {
     ]
   }
 }
-
-data "aws_iam_policy_document" "allow_iam_connect" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "elasticache:Connect",
-    ]
-
-    resources = [
-      aws_elasticache_user.main.arn,
-    ]
-  }
-}

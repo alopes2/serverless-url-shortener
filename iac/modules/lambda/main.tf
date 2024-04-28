@@ -14,10 +14,10 @@ resource "aws_lambda_function" "lambda" {
   handler       = "index.handler"
   runtime       = "nodejs20.x"
 
-  vpc_config {
-    security_group_ids = var.security_group_ids
-    subnet_ids         = var.subnet_ids
-  }
+  # vpc_config {
+  #   security_group_ids = var.security_group_ids
+  #   subnet_ids         = var.subnet_ids
+  # }
 
   environment {
     variables = var.environment_variables
