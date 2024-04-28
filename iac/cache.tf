@@ -14,7 +14,7 @@ resource "aws_elasticache_serverless_cache" "urls_cache" {
   description          = "URLs cache"
   major_engine_version = "7"
 
-  security_group_ids = [data.aws_security_group.default_security_group]
+  security_group_ids = [data.aws_security_group.default_security_group.id]
   subnet_ids         = data.aws_subnets.default_vpc.ids
   user_group_id      = aws_elasticache_user_group.main.id
 }
