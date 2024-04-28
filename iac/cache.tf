@@ -20,10 +20,10 @@ resource "aws_elasticache_serverless_cache" "urls_cache" {
 }
 
 resource "aws_elasticache_user" "main" {
-  user_id       = "urlShortener"
-  user_name     = "urlShortener"
+  user_id       = "url_shortener"
+  user_name     = "url_shortener"
   access_string = "on ~* +@all"
-  engine        = "REDIS"
+  engine        = "redis"
 
   authentication_mode {
     type = "iam"
@@ -31,9 +31,9 @@ resource "aws_elasticache_user" "main" {
 }
 
 resource "aws_elasticache_user_group" "main" {
-  user_group_id = "mainUserGroup"
+  user_group_id = "main_user_group"
   user_ids      = [aws_elasticache_user.main.user_id, data.aws_elasticache_user.default.user_id]
-  engine        = "REDIS"
+  engine        = "redis"
 }
 
 data "aws_elasticache_user" "default" {
