@@ -23,7 +23,7 @@ resource "aws_elasticache_user" "main" {
   user_id       = "url_shortener"
   user_name     = "url_shortener"
   access_string = "on ~* +@all"
-  engine        = "redis"
+  engine        = "REDIS"
 
   authentication_mode {
     type = "iam"
@@ -33,7 +33,7 @@ resource "aws_elasticache_user" "main" {
 resource "aws_elasticache_user_group" "main" {
   user_group_id = "main_user_group"
   user_ids      = [aws_elasticache_user.main.user_id, data.aws_elasticache_user.default.user_id]
-  engine        = "redis"
+  engine        = "REDIS"
 }
 
 data "aws_elasticache_user" "default" {
