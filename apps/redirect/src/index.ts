@@ -21,6 +21,7 @@ console.log('Redis URL ', redisUrl);
 const redisClient = createClient({
   url: redisUrl,
   username: process.env.REDIS_USERNAME,
+  password: process.env.REDIS_PASSWORD,
   socket: {
     tls: true,
   },

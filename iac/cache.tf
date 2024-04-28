@@ -26,7 +26,8 @@ resource "aws_elasticache_user" "main" {
   engine        = "REDIS"
 
   authentication_mode {
-    type = "iam"
+    type      = "password"
+    passwords = ["SuperSecret123"]
   }
 }
 
