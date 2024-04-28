@@ -1,6 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { createClient } from 'redis';
 
 const tableName = 'urls';
 const redirectCodeParam = 'redirectCode';
@@ -19,6 +20,7 @@ console.log('Redis URL ', redisUrl);
 
 const redisClient = createClient({
   url: redisUrl,
+  username: process.env.REDIS_USERNAME,
   socket: {
     tls: true,
   },
@@ -37,6 +39,18 @@ export const handler = async (
   }
 
   let redirectCode: string = event.pathParameters[redirectCodeParam];
+
+  var cachedUrl = await redisClient.get(redirectCode);
+
+  if (cachedUrl) {
+    return {
+      statusCode: 302,
+      headers: {
+        Location: cachedUrl, // For simplicity, let's say the first is our expected URL
+      },
+      body: '',
+    };
+  }
 
   console.log('Processing request code ', redirectCode);
 
@@ -67,6 +81,8 @@ export const handler = async (
     const url: string = dynamoResponse.Items[0].URL;
 
     console.log('Redirecting code %s to URL %s', redirectCode, url);
+
+    await redisClient.set(redirectCode, url);
 
     return {
       statusCode: 302,
