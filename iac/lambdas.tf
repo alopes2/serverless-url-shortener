@@ -6,6 +6,9 @@ module "create_short_url_lambda" {
     data.aws_iam_policy_document.create_short_url_lambda.json
   ]
 
+  security_group_ids = [data.aws_security_group.default_security_group.id]
+  subnet_ids         = data.aws_subnets.default_vpc.ids
+
   environment_variables = {
     BASE_URL = "https://x06h2c82x8.execute-api.eu-central-1.amazonaws.com/live/",
   }
