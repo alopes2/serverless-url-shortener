@@ -23,9 +23,9 @@ module "redirect_lambda" {
     DAX_ENDPOINT = aws_dax_cluster.urls.cluster_address
   }
 
-  has_vpc            = true
-  security_group_ids = [data.aws_security_group.default_security_group.id]
-  subnet_ids         = data.aws_subnets.default_vpc.ids
+  # has_vpc            = true
+  # security_group_ids = [data.aws_security_group.default_security_group.id]
+  # subnet_ids         = data.aws_subnets.default_vpc.ids
 
   depends_on = [aws_dax_cluster.urls]
 }
