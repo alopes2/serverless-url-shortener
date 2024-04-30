@@ -17,11 +17,25 @@ data "aws_iam_policy_document" "allow_get_url_lambda" {
     effect = "Allow"
 
     actions = [
-      "dax:Query",
+      "dynamodb:Query",
     ]
 
     resources = [
-      "${aws_dax_cluster.urls.arn}",
+      "${aws_dynamodb_table.urls.arn}/index/${local.codeIndex}",
     ]
   }
 }
+
+# data "aws_iam_policy_document" "allow_get_url_lambda" {
+#   statement {
+#     effect = "Allow"
+
+#     actions = [
+#       "dax:Query",
+#     ]
+
+#     resources = [
+#       "${aws_dax_cluster.urls.arn}",
+#     ]
+#   }
+# }

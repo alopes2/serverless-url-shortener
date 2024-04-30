@@ -8,8 +8,6 @@ const redirectCodeParam = 'redirectCode';
 
 const daxEndpoint = `dax://${process.env.DAX_ENDPOINT}`;
 
-console.log('DAX URL %s', daxEndpoint);
-
 export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
@@ -26,10 +24,11 @@ export const handler = async (
 
   console.log('Processing request code ', redirectCode);
 
-  var dax = new AmazonDaxClient({
-    endpoints: [daxEndpoint!],
-  });
-  var client = new AWS.DynamoDB.DocumentClient({ service: dax });
+  // var dax = new AmazonDaxClient({
+  //   endpoints: [daxEndpoint!],
+  // });
+  // var client = new AWS.DynamoDB.DocumentClient({ service: dax });
+  var client = new AWS.DynamoDB.DocumentClient();
 
   try {
     const dynamoResponse = await client
