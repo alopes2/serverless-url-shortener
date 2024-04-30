@@ -22,15 +22,13 @@ module "redirect_lambda" {
     data.aws_iam_policy_document.allow_get_url_lambda.json
   ]
 
-  # environment_variables = {
-  #   "ELASTICACHE_PORT" = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].port}"
-  #   "ELASTICACHE_URL"  = "${aws_elasticache_serverless_cache.urls_cache.endpoint[0].address}"
-  #   "REDIS_USERNAME"   = "${aws_elasticache_user.main.user_name}"
-  #   "REDIS_PASSWORD"   = "MySuperSecret123"
-  # }
+  environment_variables = {
+    DAX_ENDPOINT = aws_dax_cluster.urls.cluster_address
+  }
 
-  # security_group_ids = [data.aws_security_group.default_security_group.id]
-  # subnet_ids         = data.aws_subnets.default_vpc.ids
+  has_vpc            = true
+  security_group_ids = [data.aws_security_group.default_security_group.id]
+  subnet_ids         = data.aws_subnets.default_vpc.ids
 
-  # depends_on = [aws_elasticache_serverless_cache.urls_cache]
+  depends_on = [aws_dax_cluster.urls]
 }

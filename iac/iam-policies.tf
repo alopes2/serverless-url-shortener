@@ -17,11 +17,11 @@ data "aws_iam_policy_document" "allow_get_url_lambda" {
     effect = "Allow"
 
     actions = [
-      "dynamodb:Query",
+      "dax:Query",
     ]
 
     resources = [
-      "${aws_dynamodb_table.urls.arn}/index/${local.codeIndex}",
+      "${aws_dax_cluster.urls.arn}",
     ]
   }
 }

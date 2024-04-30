@@ -21,15 +21,20 @@ variable "environment_variables" {
   default     = null
 }
 
-# variable "security_group_ids" {
-#   description = "The security groups for this lambda."
-#   type        = set(string)
-#   default     = null
-# }
+variable "has_vpc" {
+  description = "If a lambda function requires VPC configuration"
+  type        = bool
+  default     = false
+}
 
+variable "security_group_ids" {
+  description = "The security groups for this lambda."
+  type        = set(string)
+  default     = null
+}
 
-# variable "subnet_ids" {
-#   description = "The subnets for this lambda."
-#   type        = set(string)
-#   default     = null
-# }
+variable "subnet_ids" {
+  description = "The subnets for this lambda."
+  type        = set(string)
+  default     = null
+}
