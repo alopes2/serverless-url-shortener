@@ -4,12 +4,7 @@ resource "aws_dax_cluster" "urls" {
   node_type          = "dax.t2.small"
   replication_factor = 1
   security_group_ids = [data.aws_security_group.default_security_group.id]
-  subnet_group_name  = aws_dax_subnet_group.name.name
-}
-
-resource "aws_dax_subnet_group" "name" {
-  name       = "Default"
-  subnet_ids = data.aws_subnets.default_vpc.ids
+  subnet_group_name  = "default"
 }
 
 resource "aws_iam_role" "dax" {
