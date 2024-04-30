@@ -6,7 +6,7 @@ import AmazonDaxClient from 'amazon-dax-client';
 const tableName = 'urls';
 const redirectCodeParam = 'redirectCode';
 
-const daxEndpoint = process.env.DAX_ENDPOINT;
+const daxEndpoint = `dax://${process.env.DAX_ENDPOINT}`;
 
 console.log('DAX URL %s', daxEndpoint);
 
